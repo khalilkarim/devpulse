@@ -1,5 +1,21 @@
-CREATE TYPE source_type AS ENUM ('LinkedIn', 'Indeed');
-CREATE TYPE period_type_enum AS ENUM ('week', 'month', 'year');
+DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS companies CASCADE;
+DROP TABLE IF EXISTS skills CASCADE;
+DROP TABLE IF EXISTS topics CASCADE;
+DROP TABLE IF EXISTS job_postings CASCADE;
+DROP TABLE IF EXISTS market_trends CASCADE;
+DROP TABLE IF EXISTS user_skills CASCADE;
+DROP TABLE IF EXISTS job_posting_skills CASCADE;
+DROP TABLE IF EXISTS saved_jobs CASCADE;
+DROP TABLE IF EXISTS saved_trends CASCADE;
+DROP TABLE IF EXISTS saved_companies CASCADE;
+DROP TABLE IF EXISTS scraper_jobs CASCADE;
+
+DROP TYPE IF EXISTS source_type;
+DROP TYPE IF EXISTS period_type_enum;
+
+CREATE TYPE  source_type AS ENUM ('LinkedIn', 'Indeed');
+CREATE TYPE  period_type_enum AS ENUM ('week', 'month', 'year');
 
 CREATE TABLE users (
     id SERIAL PRIMARY KEY, name VARCHAR(100) NOT NULL, email VARCHAR(100) NOT NULL UNIQUE,
@@ -7,55 +23,55 @@ CREATE TABLE users (
     );
 
 CREATE TABLE skills (
-    id SERIAL PRIMARY KEY, name VARCHAR(100)
-);
+     id SERIAL PRIMARY KEY, name VARCHAR(100)
+    );
 
 CREATE TABLE companies (
     id SERIAL PRIMARY KEY, name VARCHAR(100) NOT NULL, company_site TEXT NOT NULL, location VARCHAR(100),
     application_success_rate DECIMAL (5,2)
-);
+    );
 
 CREATE TABLE topics (
-    id SERIAL PRIMARY KEY, name VARCHAR(100) NOT NULL
-);
+     id SERIAL PRIMARY KEY, name VARCHAR(100) NOT NULL
+    );
 
 CREATE TABLE job_postings (
     id SERIAL PRIMARY KEY, title VARCHAR(100) NOT NULL, description TEXT, location VARCHAR(100),
     url TEXT NOT NULL, source source_type NOT NULL, posted_at DATE, scraped_at TIMESTAMP DEFAULT NOW(),
     is_active BOOLEAN DEFAULT true, is_analyzed BOOLEAN DEFAULT false, company_id INT REFERENCES companies(id),
     topic_id INT REFERENCES topics(id)
-);
+    );
 
 CREATE TABLE market_trends (
-    id SERIAL PRIMARY KEY, mention_count BIGINT NOT NULL DEFAULT 0, period_start DATE NOT NULL,
-    period_type period_type_enum NOT NULL, topic_id INT REFERENCES topics(id), skill_id INT REFERENCES skills(id),
+     id SERIAL PRIMARY KEY, mention_count BIGINT NOT NULL DEFAULT 0, period_start DATE NOT NULL,
+     period_type period_type_enum NOT NULL, topic_id INT REFERENCES topics(id), skill_id INT REFERENCES skills(id),
     UNIQUE (skill_id, period_start, period_type)
-);
+    );
 
 CREATE TABLE user_skills (
-    user_id INT REFERENCES users(id) ON DELETE CASCADE , skill_id INT REFERENCES skills(id) ON DELETE CASCADE,
+     user_id INT REFERENCES users(id) ON DELETE CASCADE , skill_id INT REFERENCES skills(id) ON DELETE CASCADE,
     PRIMARY KEY (user_id, skill_id)
-);
+    );
 
 CREATE TABLE job_posting_skills (
-    job_id INT REFERENCES job_postings(id), skill_id INT REFERENCES skills(id),
+     job_id INT REFERENCES job_postings(id), skill_id INT REFERENCES skills(id),
     PRIMARY KEY (job_id, skill_id)
-);
+    );
 
 CREATE TABLE saved_jobs (
     user_id INT REFERENCES users(id), job_id INT REFERENCES job_postings(id),
     saved_at TIMESTAMP DEFAULT NOW(), PRIMARY KEY (user_id, job_id)
-);
+    );
 
 CREATE TABLE saved_companies (
     user_id INT REFERENCES users(id), company_id INT REFERENCES companies(id),
     saved_at TIMESTAMP DEFAULT NOW(), PRIMARY KEY (user_id, company_id)
-);
+    );
 
 CREATE TABLE saved_trends (
-    user_id INT REFERENCES users(id), trend_id INT REFERENCES market_trends(id),
+     user_id INT REFERENCES users(id), trend_id INT REFERENCES market_trends(id),
     saved_at TIMESTAMP DEFAULT NOW(), PRIMARY KEY (user_id, trend_id)
-);
+    );
 
 CREATE TABLE scraper_jobs (
     id SERIAL PRIMARY KEY, search_query VARCHAR(100) NOT NULL , source source_type NOT NULL,
@@ -63,10 +79,10 @@ CREATE TABLE scraper_jobs (
     jobs_found_count BIGINT DEFAULT 0, error_message TEXT, next_retry_at TIMESTAMP,
     CHECK ( jobs_found_count >= 0 ),
     CONSTRAINT  check_success_rate CHECK (
-        (scrape_successful = true AND error_message IS NULL)
-        OR (scrape_successful = false AND error_message IS NOT NULL)
-        OR (scrape_successful IS NULL )
-        )
+(scrape_successful = true AND error_message IS NULL)
+    OR (scrape_successful = false AND error_message IS NOT NULL)
+    OR (scrape_successful IS NULL )
+    )
 
-);
+    );
 
