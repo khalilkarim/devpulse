@@ -14,7 +14,7 @@ DROP TABLE IF EXISTS scraper_jobs CASCADE;
 DROP TYPE IF EXISTS source_type;
 DROP TYPE IF EXISTS period_type_enum;
 
-CREATE TYPE  source_type AS ENUM ('LinkedIn', 'Indeed');
+CREATE TYPE  source_type AS ENUM ('LinkedIn', 'Indeed', 'Adzuna');
 CREATE TYPE  period_type_enum AS ENUM ('week', 'month', 'year');
 
 CREATE TABLE users (

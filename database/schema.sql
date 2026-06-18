@@ -1,4 +1,4 @@
-CREATE TYPE source_type AS ENUM ('LinkedIn', 'Indeed');
+CREATE TYPE source_type AS ENUM ('LinkedIn', 'Indeed', 'Adzuna');
 CREATE TYPE period_type_enum AS ENUM ('week', 'month', 'year');
 
 CREATE TABLE users (
