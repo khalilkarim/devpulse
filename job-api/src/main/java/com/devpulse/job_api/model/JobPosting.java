@@ -49,6 +49,10 @@ public class JobPosting {
     private LocalDateTime scrapedAt;
 
     @ManyToOne
+    @JoinColumn(name = "topic_id")
+    private Topic topic;
+
+    @ManyToOne
     @JoinColumn(name = "company_id")
     private Company company;
 

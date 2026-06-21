@@ -15,7 +15,7 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
     List<JobPosting> findByPostedAt(LocalDateTime postedAt);
     List<JobPosting> findByCompanyName(String name);
     List<JobPosting> findByTopicName(String name);
-    List<JobPosting> findByIsActiveTrue(Boolean isActive);
+    List<JobPosting> findByIsActive(Boolean isActive);
 
     @Query("SELECT j FROM JobPosting j JOIN j.skills s WHERE s.name = :skill")
     List<JobPosting> findBySkillName(@Param("skill") String skillName);
