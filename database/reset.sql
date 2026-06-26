@@ -36,7 +36,7 @@ CREATE TABLE topics (
     );
 
 CREATE TABLE job_postings (
-    id SERIAL PRIMARY KEY, title VARCHAR(100) NOT NULL, description TEXT, location VARCHAR(100),
+    id SERIAL PRIMARY KEY, title VARCHAR(100) NOT NULL, description TEXT, location VARCHAR(100), external_id VARCHAR(100) UNIQUE,
     url TEXT NOT NULL, source source_type NOT NULL, posted_at DATE, scraped_at TIMESTAMP DEFAULT NOW(),
     is_active BOOLEAN DEFAULT true, is_analyzed BOOLEAN DEFAULT false, company_id INT REFERENCES companies(id),
     topic_id INT REFERENCES topics(id)
