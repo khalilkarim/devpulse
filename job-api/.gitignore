@@ -4,6 +4,15 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+# Python virtual environments
+scraper/venv/
+venv/
+.venv/
+
+# Python cache
+__pycache__/
+*.pyc
+
 #env
 scraper/.env
 
