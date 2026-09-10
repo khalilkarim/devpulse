@@ -14,9 +14,6 @@ public class UserService {
     UserRepository userRepository;
 
     public User findByEmail(String email) {
-        if (!userRepository.existsByEmail(email)) {
-            throw new RuntimeException("User not found");
-        }
        return userRepository.findByEmail(email)
                .orElseThrow(() -> new RuntimeException("User not found"));
     }
