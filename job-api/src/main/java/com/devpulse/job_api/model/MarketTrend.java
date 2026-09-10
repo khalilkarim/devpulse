@@ -15,6 +15,7 @@ public class MarketTrend {
     private Long id;
 
     @Column(name = "period_type", nullable = false)
+    @Enumerated
     private PeriodType periodType;
 
     @Column(name = "mention_count", nullable = false)

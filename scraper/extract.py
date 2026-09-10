@@ -25,7 +25,6 @@ def _load_job_posting_descriptions(cursor):
     return job_posting_descriptions
 
 def extract_skills(cursor):
-
     skills = _load_skills(cursor)
     titles = _load_job_posting_titles(cursor)
     descriptions = _load_job_posting_descriptions(cursor)
@@ -33,24 +32,15 @@ def extract_skills(cursor):
     matching_skills = []
 
     for posting_id, description in descriptions:
-        lower_desc = description.lower()
-        for skill_id, skill_name in skills:
-            if skill_name.lower() in lower_desc:
-                matching_skills.append((posting_id, skill_id))
-
-    print(f"matching_skills_after_desc: {matching_skills}")
+        for skill_id in match_skills_in_text(description, skills):
+            matching_skills.append((posting_id, skill_id))
 
     for posting_id, title in titles:
-        lower_title = title.lower()
-        for skill_id, skill_name in skills:
-            if skill_name.lower() in lower_title:
-                matching_skills.append(posting_id, skill_id)
+        for skill_id in match_skills_in_text(title, skills):
+            matching_skills.append((posting_id, skill_id))
 
-    print(f"matching_skills_after_titles: {matching_skills}")
+    return _group_skills(matching_skills)
 
-    grouped_skills = _group_skills(matching_skills)
-
-    return grouped_skills
 
 
 def _group_skills(matching_skills):
@@ -59,6 +49,11 @@ def _group_skills(matching_skills):
         grouped_dict[key].append(value)
 
     return grouped_dict
+
+def match_skills_in_text(text, skills):
+    """text: str. skills: list of (id, name). Returns: list of matching skill_ids."""
+    return [skill_id for skill_id, skill_name in skills
+            if skill_name.lower() in text.lower()]
 
 
 

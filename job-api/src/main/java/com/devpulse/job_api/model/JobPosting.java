@@ -34,6 +34,7 @@ public class JobPosting {
     private String url;
 
     @Column(nullable = false)
+    @Enumerated
     private SourceType source;
 
     @Column(name = "is_analyzed")

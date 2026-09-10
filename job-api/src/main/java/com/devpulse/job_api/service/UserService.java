@@ -29,9 +29,9 @@ public class UserService {
         return false;
     }
 
-    public List<JobPosting> getSavedJobPostings(Long userId) {
-
-    }
+//    public List<JobPosting> getSavedJobPostings(Long userId) {
+//
+//    }
 
 
 
