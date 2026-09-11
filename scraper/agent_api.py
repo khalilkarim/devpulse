@@ -33,7 +33,7 @@ def call_gemini(query, user_id):
         results = {}
         for tool_name in tool_names:
             print(f"about to call: {tool_name}")
-            results[tool_name] = tool_map[tool_name](cursor, user_id)
+            results[tool_name] = tool_map[tool_name](cursor, user_id, query, client)
 
     except Exception as e:
         print(f"Error: {e}")
